@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>Hangman</title>
+<style>
+    body {
+        font-family:monospace;
+    }
+.word{
+    font-size:5rem;
+}
+
+.counter {
+ padding: 20px
+}
+
+.form {
+    display:flex;
+    padding-top:25px;
+}
+.form .text {
+    color:#aaa;
+    opacity:1;
+    height:2.4rem;
+    width:2rem;
+}
+.form button {
+    background-color: #5252f2;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+#hangman {
+      position: relative;
+      top: 30px;
+      stroke: black;
+      fill: none;
+      stroke-width: 2;
+    }
+
+</style>
+</head>
+<body>
+       <h1>HANGMAN</h1>
+        <div class="word">
+            {% for char in session.current.word_obfuscate %}
+            <span>{{char}}</span>
+            {%endfor%}
+        </div>
+
+        
+        <div class="form">
+            {%if "_" in session.current.word_obfuscate and session.current.lost == False %}
+            <form method='post'>
+                <input type='text' class="text" name='letter' maxlength='1' autocomplete="off">
+                <button type='submit'>TRY!</button>
+            </form>
+            {%elif session.current.lost == True%}
+            <button onclick="location.href='/restart'">You lost! TRY AGAIN!</button>
+            {%else%}
+            <button onclick="location.href='/restart'">You rock! TRY ANOTHER ONE!</button>
+            {%endif%}
+        </div>
+        
+        <div class="hm-box">
+                <svg width="500" height="270" id="hangman">
+                        {%if session.current.counter >= 1%}<circle cx="50" cy="50" r="30" id="head" {%if session.current.counter == 5 %}fill="red"{%endif%}/>{%endif%}
+                        <line x1="50" y1="2" x2="150" y2="2" id="top"/>
+                        <line x1="50" y1="1" x2="50" y2="20" id="rope"/>
+                        <line x1="0" y1="250" x2="170" y2="250" id="bottom"/>
+                        <line x1="150" y1="1" x2="150" y2="250" id="right"/>
+                        {%if session.current.counter >= 2%}<line x1="50" y1="80" x2="50" y2="170" id="torso"/>{%endif%}
+                        {%if session.current.counter >= 3%}<line x1="50" y1="120" x2="100" y2="90" id="arm1"/>{%endif%}
+                        {%if session.current.counter >= 3%}<line x1="50" y1="120" x2="0" y2="90" id="arm2"/>{%endif%}
+                        {%if session.current.counter >= 4%}<line x1="20" y1="230" x2="50" y2="170" id="leg1"/>{%endif%}
+                        {%if session.current.counter >= 5%}<line x1="80" y1="230" x2="50" y2="170" id="leg2"/>{%endif%}
+                      </svg>
+        </div>
+        <div class="counter">
+            {{session.current.counter}}/5
+        </div>
+
+        {%if session.highscore >= 1%}
+        <div class="counter">
+                <span class="title">HIGHSCORE</span>
+                {{session.highscore}}
+            </div>
+        {%endif%}
+
+</body>
+</html>
