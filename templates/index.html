@@ -45,19 +45,19 @@
 <body>
        <h1>HANGMAN</h1>
         <div class="word">
-            {% for char in session.current.word_obfuscate %}
+            {% for char in session.instance.word_obfuscate %}
             <span>{{char}}</span>
             {%endfor%}
         </div>
 
         
         <div class="form">
-            {%if "_" in session.current.word_obfuscate and session.current.lost == False %}
+            {%if "_" in session.instance.word_obfuscate and session.instance.tries > 0 %}
             <form method='post'>
                 <input type='text' class="text" name='letter' maxlength='1' autocomplete="off">
                 <button type='submit'>TRY!</button>
             </form>
-            {%elif session.current.lost == True%}
+            {%elif session.instance.tries == 0%}
             <button onclick="location.href='/restart'">You lost! TRY AGAIN!</button>
             {%else%}
             <button onclick="location.href='/restart'">You rock! TRY ANOTHER ONE!</button>
@@ -66,20 +66,20 @@
         
         <div class="hm-box">
                 <svg width="500" height="270" id="hangman">
-                        {%if session.current.counter >= 1%}<circle cx="50" cy="50" r="30" id="head" {%if session.current.counter == 5 %}fill="red"{%endif%}/>{%endif%}
+                        {%if session.instance.tries < 5 %}<circle cx="50" cy="50" r="30" id="head" {%if session.instance.tries == 0 %}fill="red"{%endif%}/>{%endif%}
                         <line x1="50" y1="2" x2="150" y2="2" id="top"/>
                         <line x1="50" y1="1" x2="50" y2="20" id="rope"/>
                         <line x1="0" y1="250" x2="170" y2="250" id="bottom"/>
                         <line x1="150" y1="1" x2="150" y2="250" id="right"/>
-                        {%if session.current.counter >= 2%}<line x1="50" y1="80" x2="50" y2="170" id="torso"/>{%endif%}
-                        {%if session.current.counter >= 3%}<line x1="50" y1="120" x2="100" y2="90" id="arm1"/>{%endif%}
-                        {%if session.current.counter >= 3%}<line x1="50" y1="120" x2="0" y2="90" id="arm2"/>{%endif%}
-                        {%if session.current.counter >= 4%}<line x1="20" y1="230" x2="50" y2="170" id="leg1"/>{%endif%}
-                        {%if session.current.counter >= 5%}<line x1="80" y1="230" x2="50" y2="170" id="leg2"/>{%endif%}
+                        {%if session.instance.tries < 4%}<line x1="50" y1="80" x2="50" y2="170" id="torso"/>{%endif%}
+                        {%if session.instance.tries < 3%}<line x1="50" y1="120" x2="100" y2="90" id="arm1"/>{%endif%}
+                        {%if session.instance.tries < 3%}<line x1="50" y1="120" x2="0" y2="90" id="arm2"/>{%endif%}
+                        {%if session.instance.tries < 2%}<line x1="20" y1="230" x2="50" y2="170" id="leg1"/>{%endif%}
+                        {%if session.instance.tries < 1%}<line x1="80" y1="230" x2="50" y2="170" id="leg2"/>{%endif%}
                       </svg>
         </div>
         <div class="counter">
-            {{session.current.counter}}/5
+            Tries left: {{session.instance.tries}}
         </div>
 
         {%if session.highscore >= 1%}
