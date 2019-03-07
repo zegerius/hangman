@@ -89,7 +89,6 @@ def instance():
         session["highscore"] = 0
 
     game = Hangman(**session.get("instance"))
-    print(game.word)
     letter = request.values.get("letter") or request.args.get("letter")
     if letter:
         game.guess(letter)
@@ -118,3 +117,6 @@ def restart():
     except:
         pass
     return redirect("/")
+
+if __name__ == '__main__':
+    app.run()
