@@ -82,25 +82,32 @@ def instance():
     """
     Runs a hangman game instance for the browser. Progress is stored in a server-side session.
     """
+    # Start a new game
     if "instance" not in session:
         instance = Hangman()
         session["instance"] = instance.new_game()
     if "highscore" not in session:
         session["highscore"] = 0
 
+    # Unfurl session into Hangman() class
     game = Hangman(**session.get("instance"))
+    # Accept both querystring as POST parameter
     letter = request.values.get("letter") or request.args.get("letter")
+
     if letter:
         game.guess(letter)
         if game.won():
             session["highscore"] += 1
         session["instance"] = game.__dict__
+        # Put an updated instance of the game back in the session
 
     if request.args.get("api") == "":
+        # If the API querystring is detected, load json instead of html
         instance = Hangman(**session.get("instance"))
         j = instance.api()
         j["highscore"] = session.get("highscore")
         if instance.won() or instance.lost():
+            # If the game was won or lost, reset the instance so a new API call will immediately start a new game.
             session["instance"] = instance.new_game()
         return jsonify(j)
     else:
@@ -118,5 +125,6 @@ def restart():
         pass
     return redirect("/")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run()
