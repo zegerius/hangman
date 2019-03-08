@@ -11,8 +11,8 @@ Play the web-version by filling in 1 letter or number in the input box and click
 Play the API version by appending the URL with ?api. You can send letters with both a querystring or POST variable `letter`. For example: `/?api&letter=a`. Once you win or lose, a new game is immediately ready to play.
 
 ## Install
-### Flask
-Run the game by exporting and setting `FLASK_APP` to main.py. Execute `flask run` and go to `http://127.0.0.1:5000/`.
+### Flask 
+Run the game by running `main.py` and go to `http://127.0.0.1:5000/`.
 ### Heroku
 The game is configured to run on Heroku. Simply deploy it to a dyno and enjoy. A demo runs here: https://damp-retreat-70644.herokuapp.com/
 
